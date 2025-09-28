@@ -44,13 +44,17 @@
           <h3>No posts yet</h3>
           <p>Be the first to share something!</p>
         </div>
-        
+
+        <!--  Pass post.photoUrl down -->
         <PostCard 
           v-else
-          v-for="post in posts" 
-          :key="post._id" 
-          :post="post"
-          @reaction-changed="handleReactionChanged"
+  v-for="post in posts"
+  :key="post._id"
+  :post="{
+    ...post,
+    photoUrl: post.photoUrl ? `http://localhost:3000${post.photoUrl}` : null
+  }"
+  @reaction-changed="handleReactionChanged"
         />
       </div>
     </div>
@@ -104,29 +108,25 @@ export default {
     },
     
     handlePostCreated() {
-      // Show success message - post is pending approval
       this.$refs.successMessage?.show()
     },
     
     handleReactionChanged(postId) {
-      // Reload posts to get updated reaction counts
       this.loadPosts()
     },
     
     setupSocketListeners() {
       const socket = socketService.connect()
-      
       socket.on('postApproved', this.handleNewPost)
       socket.on('postDeleted', this.handleDeletedPost)
       socket.on('reactionUpdate', this.handleReactionUpdate)
     },
     
     handleNewPost(post) {
-      // Add new approved post to the feed
       if (this.sortBy === 'recent') {
         this.posts.unshift(post)
       } else {
-        this.loadPosts() // Reload for proper sorting
+        this.loadPosts()
       }
     },
     
@@ -143,6 +143,7 @@ export default {
   }
 }
 </script>
+
 
 <style scoped>
 .container {

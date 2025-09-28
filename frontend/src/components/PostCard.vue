@@ -1,5 +1,6 @@
 <template>
   <div class="post-card">
+    <!-- Header -->
     <div class="post-header">
       <div class="anonymous-info">
         <i class="fas fa-user-secret"></i>
@@ -9,17 +10,23 @@
         {{ formatDate(post.dateCreated) }}
       </div>
     </div>
-    
+
+    <!-- Content -->
     <div class="post-content">
       <p class="post-message">{{ post.messageContent }}</p>
       <div v-if="post.photoUrl" class="post-image">
-        <img :src="getImageUrl(post.photoUrl)" :alt="'Post image'" @click="openImageModal" />
+        <img
+          :src="getImageUrl(post.photoUrl)"
+          :alt="'Post image'"
+          @click="openImageModal"
+        />
       </div>
     </div>
-    
+
+    <!-- Actions -->
     <div class="post-actions">
       <div class="reactions">
-        <button 
+        <button
           v-for="reaction in reactionTypes"
           :key="reaction.type"
           class="reaction-btn"
@@ -28,23 +35,25 @@
           :title="reaction.label"
         >
           <i :class="reaction.icon"></i>
-          <span v-if="reactionCounts[reaction.type]">{{ reactionCounts[reaction.type] }}</span>
+          <span v-if="reactionCounts[reaction.type]">
+            {{ reactionCounts[reaction.type] }}
+          </span>
         </button>
       </div>
-      
+
       <div class="post-meta">
         <span class="total-reactions">
           <i class="fas fa-heart"></i>
-          {{ post.reactionCount || 0 }}
+          {{ totalReactions }}
         </span>
         <button class="report-btn" @click="showReportModal = true" title="Report this post">
           <i class="fas fa-flag"></i>
         </button>
       </div>
     </div>
-    
+
     <!-- Image Modal -->
-    <div v-if="showImageModal" class="image-modal" @click="closeImageModal">
+    <div v-if="showImageModal" class="image-modal" @click.self="closeImageModal">
       <div class="modal-content">
         <img :src="getImageUrl(post.photoUrl)" alt="Full size image" />
         <button class="close-modal" @click="closeImageModal">
@@ -52,10 +61,10 @@
         </button>
       </div>
     </div>
-    
+
     <!-- Report Modal -->
-    <div v-if="showReportModal" class="report-modal" @click="closeReportModal">
-      <div class="modal-content" @click.stop>
+    <div v-if="showReportModal" class="report-modal" @click.self="closeReportModal">
+      <div class="modal-content">
         <h3>Report Post</h3>
         <p>Why are you reporting this post?</p>
         <div class="report-options">
@@ -83,10 +92,7 @@ import moment from 'moment'
 export default {
   name: 'PostCard',
   props: {
-    post: {
-      type: Object,
-      required: true
-    }
+    post: { type: Object, required: true }
   },
   data() {
     return {
@@ -99,7 +105,6 @@ export default {
       reactionTypes: [
         { type: 'like', icon: 'fas fa-thumbs-up', label: 'Like' },
         { type: 'heart', icon: 'fas fa-heart', label: 'Love' },
-        { type: 'thumbs_up', icon: 'fas fa-thumbs-up', label: 'Approve' },
         { type: 'laugh', icon: 'fas fa-laugh', label: 'Funny' },
         { type: 'wow', icon: 'fas fa-surprise', label: 'Wow' },
         { type: 'sad', icon: 'fas fa-sad-tear', label: 'Sad' }
@@ -111,6 +116,11 @@ export default {
         { value: 'fake_news', label: 'False information' },
         { value: 'other', label: 'Other' }
       ]
+    }
+  },
+  computed: {
+    totalReactions() {
+      return Object.values(this.reactionCounts).reduce((sum, val) => sum + val, 0)
     }
   },
   async mounted() {
@@ -126,29 +136,23 @@ export default {
         console.error('Error loading reactions:', error)
       }
     },
-    
     async toggleReaction(type) {
       try {
         if (this.userReaction === type) {
-          // Remove reaction
           await reactionsAPI.removeReaction(this.post._id)
           this.userReaction = null
         } else {
-          // Add/change reaction
           await reactionsAPI.addReaction(this.post._id, type)
           this.userReaction = type
         }
-        
         await this.loadReactions()
         this.$emit('reaction-changed', this.post._id)
       } catch (error) {
         console.error('Error toggling reaction:', error)
       }
     },
-    
     async submitReport() {
       if (!this.selectedReportReason) return
-      
       try {
         this.reporting = true
         await reactionsAPI.reportPost(this.post._id, this.selectedReportReason)
@@ -161,23 +165,21 @@ export default {
         this.reporting = false
       }
     },
-    
     formatDate(date) {
       return moment(date).fromNow()
     },
-    
     getImageUrl(photoUrl) {
-      return `http://localhost:3000${photoUrl}`
+      // Handles both local file paths and hosted URLs
+      if (!photoUrl) return ''
+      if (photoUrl.startsWith('http') || photoUrl.startsWith('/')) return photoUrl
+      return `/uploads/${photoUrl}` // adjust to your local uploads folder
     },
-    
     openImageModal() {
       this.showImageModal = true
     },
-    
     closeImageModal() {
       this.showImageModal = false
     },
-    
     closeReportModal() {
       this.showReportModal = false
       this.selectedReportReason = null

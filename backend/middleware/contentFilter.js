@@ -4,7 +4,7 @@ const filter = new Filter();
 
 // Add custom inappropriate words
 const customWords = [
-  'violence', 'threat', 'harm', 'suicide', 'drug', 'illegal'
+  'violence', 'threat', 'harm', 'suicide', 'drug', 'illegal', 'kill'
 ];
 filter.addWords(...customWords);
 

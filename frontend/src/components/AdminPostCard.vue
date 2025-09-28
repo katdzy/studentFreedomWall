@@ -1,16 +1,17 @@
 <template>
   <div class="admin-post-card" :class="'status-' + post.status">
+    <!-- Header -->
     <div class="post-header">
       <div class="post-info">
         <div class="status-badge" :class="post.status">
           <i :class="getStatusIcon(post.status)"></i>
           {{ post.status.toUpperCase() }}
         </div>
-        <div class="post-date">
-          {{ formatDate(post.dateCreated) }}
+        <div class="post-date" :title="formatFullDate(post.dateCreated)">
+          {{ formatRelativeDate(post.dateCreated) }}
         </div>
       </div>
-      
+
       <div class="post-actions">
         <button 
           v-if="post.status === 'pending'"
@@ -21,7 +22,7 @@
         >
           <i class="fas fa-check"></i>
         </button>
-        
+
         <button 
           v-if="post.status === 'pending'"
           @click="rejectPost" 
@@ -31,7 +32,7 @@
         >
           <i class="fas fa-times"></i>
         </button>
-        
+
         <button 
           @click="deletePost" 
           :disabled="processing"
@@ -42,29 +43,27 @@
         </button>
       </div>
     </div>
-    
+
+    <!-- Content -->
     <div class="post-content">
       <p class="post-message">{{ post.messageContent }}</p>
       <div v-if="post.photoUrl" class="post-image">
         <img :src="getImageUrl(post.photoUrl)" alt="Post image" @click="openImageModal" />
       </div>
     </div>
-    
+
+    <!-- Meta -->
     <div class="post-meta">
       <div class="meta-item">
         <i class="fas fa-heart"></i>
         <span>{{ post.reactionCount || 0 }} reactions</span>
-      </div>
-      <div class="meta-item">
-        <i class="fas fa-calendar"></i>
-        <span>{{ formatDate(post.dateCreated) }}</span>
       </div>
       <div v-if="showReportInfo" class="meta-item report-info">
         <i class="fas fa-flag"></i>
         <span>This post has been reported</span>
       </div>
     </div>
-    
+
     <!-- Image Modal -->
     <div v-if="showImageModal" class="image-modal" @click="closeImageModal">
       <div class="modal-content">
@@ -74,7 +73,7 @@
         </button>
       </div>
     </div>
-    
+
     <!-- Confirmation Modal -->
     <div v-if="showConfirmModal" class="confirm-modal" @click="closeConfirmModal">
       <div class="modal-content" @click.stop>
@@ -99,14 +98,8 @@ import moment from 'moment'
 export default {
   name: 'AdminPostCard',
   props: {
-    post: {
-      type: Object,
-      required: true
-    },
-    showReportInfo: {
-      type: Boolean,
-      default: false
-    }
+    post: { type: Object, required: true },
+    showReportInfo: { type: Boolean, default: false }
   },
   data() {
     return {
@@ -125,7 +118,6 @@ export default {
       }
       return icons[status] || 'fas fa-question-circle'
     },
-    
     approvePost() {
       this.showConfirmation({
         title: 'Approve Post',
@@ -134,7 +126,6 @@ export default {
         handler: this.handleApprove
       })
     },
-    
     rejectPost() {
       this.showConfirmation({
         title: 'Reject Post',
@@ -143,7 +134,6 @@ export default {
         handler: this.handleReject
       })
     },
-    
     deletePost() {
       this.showConfirmation({
         title: 'Delete Post',
@@ -152,7 +142,6 @@ export default {
         handler: this.handleDelete
       })
     },
-    
     async handleApprove() {
       try {
         this.processing = true
@@ -166,7 +155,6 @@ export default {
         this.processing = false
       }
     },
-    
     async handleReject() {
       try {
         this.processing = true
@@ -180,7 +168,6 @@ export default {
         this.processing = false
       }
     },
-    
     async handleDelete() {
       try {
         this.processing = true
@@ -194,30 +181,28 @@ export default {
         this.processing = false
       }
     },
-    
     showConfirmation(action) {
       this.confirmAction = action
       this.showConfirmModal = true
     },
-    
     closeConfirmModal() {
       this.showConfirmModal = false
       this.confirmAction = {}
     },
-    
     openImageModal() {
       this.showImageModal = true
     },
-    
     closeImageModal() {
       this.showImageModal = false
     },
-    
-    formatDate(date) {
+    formatRelativeDate(date) {
+      return moment(date).fromNow()
+    },
+    formatFullDate(date) {
       return moment(date).format('MMM DD, YYYY HH:mm')
     },
-    
     getImageUrl(photoUrl) {
+      // Uses your express static route
       return `http://localhost:3000${photoUrl}`
     }
   }
@@ -233,22 +218,12 @@ export default {
   margin-bottom: 1.5rem;
   transition: all 0.3s;
 }
-
 .admin-post-card:hover {
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
-
-.status-pending {
-  border-left: 4px solid #ffc107;
-}
-
-.status-approved {
-  border-left: 4px solid #28a745;
-}
-
-.status-rejected {
-  border-left: 4px solid #dc3545;
-}
+.status-pending { border-left: 4px solid #ffc107; }
+.status-approved { border-left: 4px solid #28a745; }
+.status-rejected { border-left: 4px solid #dc3545; }
 
 .post-header {
   display: flex;
@@ -258,13 +233,11 @@ export default {
   padding-bottom: 1rem;
   border-bottom: 1px solid #f8f9fa;
 }
-
 .post-info {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
-
 .status-badge {
   padding: 0.4rem 0.8rem;
   border-radius: 20px;
@@ -274,22 +247,9 @@ export default {
   align-items: center;
   gap: 0.3rem;
 }
-
-.status-badge.pending {
-  background: #fff3cd;
-  color: #856404;
-}
-
-.status-badge.approved {
-  background: #d4edda;
-  color: #155724;
-}
-
-.status-badge.rejected {
-  background: #f8d7da;
-  color: #721c24;
-}
-
+.status-badge.pending { background: #fff3cd; color: #856404; }
+.status-badge.approved { background: #d4edda; color: #155724; }
+.status-badge.rejected { background: #f8d7da; color: #721c24; }
 .post-date {
   color: #6c757d;
   font-size: 0.9rem;
@@ -299,7 +259,6 @@ export default {
   display: flex;
   gap: 0.5rem;
 }
-
 .action-btn {
   width: 40px;
   height: 40px;
@@ -312,54 +271,27 @@ export default {
   font-size: 1rem;
   transition: all 0.3s;
 }
-
 .action-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
+.action-btn.approve { background: #28a745; color: white; }
+.action-btn.approve:hover:not(:disabled) { background: #218838; }
+.action-btn.reject { background: #ffc107; color: #212529; }
+.action-btn.reject:hover:not(:disabled) { background: #e0a800; }
+.action-btn.delete { background: #dc3545; color: white; }
+.action-btn.delete:hover:not(:disabled) { background: #c82333; }
 
-.action-btn.approve {
-  background: #28a745;
-  color: white;
-}
-
-.action-btn.approve:hover:not(:disabled) {
-  background: #218838;
-}
-
-.action-btn.reject {
-  background: #ffc107;
-  color: #212529;
-}
-
-.action-btn.reject:hover:not(:disabled) {
-  background: #e0a800;
-}
-
-.action-btn.delete {
-  background: #dc3545;
-  color: white;
-}
-
-.action-btn.delete:hover:not(:disabled) {
-  background: #c82333;
-}
-
-.post-content {
-  margin-bottom: 1rem;
-}
-
+.post-content { margin-bottom: 1rem; }
 .post-message {
   color: #2c3e50;
   line-height: 1.6;
   margin-bottom: 1rem;
   white-space: pre-wrap;
 }
-
 .post-image {
   margin-top: 1rem;
 }
-
 .post-image img {
   max-width: 300px;
   height: auto;
@@ -367,10 +299,7 @@ export default {
   cursor: pointer;
   transition: transform 0.2s;
 }
-
-.post-image img:hover {
-  transform: scale(1.02);
-}
+.post-image img:hover { transform: scale(1.02); }
 
 .post-meta {
   display: flex;
@@ -380,18 +309,14 @@ export default {
   padding-top: 1rem;
   border-top: 1px solid #f8f9fa;
 }
-
 .meta-item {
   display: flex;
   align-items: center;
   gap: 0.3rem;
 }
+.report-info { color: #dc3545; font-weight: 500; }
 
-.report-info {
-  color: #dc3545;
-  font-weight: 500;
-}
-
+/* Modal Styles */
 .image-modal {
   position: fixed;
   top: 0;
@@ -405,19 +330,16 @@ export default {
   z-index: 1000;
   cursor: pointer;
 }
-
 .image-modal .modal-content {
   position: relative;
   max-width: 90%;
   max-height: 90%;
 }
-
 .image-modal img {
   max-width: 100%;
   max-height: 100%;
   border-radius: 10px;
 }
-
 .close-modal {
   position: absolute;
   top: -40px;
@@ -433,6 +355,7 @@ export default {
   justify-content: center;
 }
 
+/* Confirm Modal */
 .confirm-modal {
   position: fixed;
   top: 0;
@@ -445,7 +368,6 @@ export default {
   justify-content: center;
   z-index: 1000;
 }
-
 .confirm-modal .modal-content {
   background: white;
   padding: 2rem;
@@ -453,23 +375,13 @@ export default {
   max-width: 400px;
   width: 90%;
 }
-
-.confirm-modal h3 {
-  margin-bottom: 1rem;
-  color: #2c3e50;
-}
-
-.confirm-modal p {
-  color: #6c757d;
-  margin-bottom: 1.5rem;
-}
-
+.confirm-modal h3 { margin-bottom: 1rem; color: #2c3e50; }
+.confirm-modal p { color: #6c757d; margin-bottom: 1.5rem; }
 .modal-actions {
   display: flex;
   gap: 1rem;
   justify-content: flex-end;
 }
-
 .confirm-btn {
   background: #dc3545;
   color: white;
@@ -479,12 +391,7 @@ export default {
   cursor: pointer;
   font-weight: 500;
 }
-
-.confirm-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
+.confirm-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 .cancel-btn {
   background: #6c757d;
   color: white;

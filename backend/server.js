@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const http = require('http');
 const socketIo = require('socket.io');
+const path = require('path'); 
 require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
@@ -20,6 +21,8 @@ const io = socketIo(server, {
     methods: ["GET", "POST"]
   }
 });
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Middleware
 app.use(helmet());
