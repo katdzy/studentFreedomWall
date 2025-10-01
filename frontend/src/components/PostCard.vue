@@ -52,6 +52,7 @@
       </div>
     </div>
 
+    <teleport to="body">
     <!-- Image Modal -->
     <div v-if="showImageModal" class="image-modal" @click.self="closeImageModal">
       <div class="modal-content">
@@ -61,7 +62,9 @@
         </button>
       </div>
     </div>
+    </teleport>
 
+    <teleport to="body">
     <!-- Report Modal -->
     <div v-if="showReportModal" class="report-modal" @click.self="closeReportModal">
       <div class="modal-content">
@@ -82,6 +85,7 @@
         </div>
       </div>
     </div>
+    </teleport>
   </div>
 </template>
 
