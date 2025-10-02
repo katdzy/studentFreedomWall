@@ -1,5 +1,9 @@
 <template>
-  <div class="post-card">
+  <div class="post-card" :style="{ 
+    background: postColor.bg, 
+    borderColor: postColor.border,
+    '--tape-color': postColor.tape
+  }">
     <!-- Header -->
     <div class="post-header">
       <div class="anonymous-info">
@@ -125,6 +129,23 @@ export default {
   computed: {
     totalReactions() {
       return Object.values(this.reactionCounts).reduce((sum, val) => sum + val, 0)
+    },
+    postColor() {
+      // Generate consistent color based on post ID
+      const colors = [
+        { bg: 'linear-gradient(to bottom, #fef3e2 0%, #fce8c8 100%)', border: '#e8d5b7', tape: 'linear-gradient(to bottom, #f4d4a0 0%, #e8c68c 100%)' }, // Cream
+        { bg: 'linear-gradient(to bottom, #ffe4e9 0%, #ffd4df 100%)', border: '#e8b7c7', tape: 'linear-gradient(to bottom, #ffb8c8 0%, #ffa4b8 100%)' }, // Pink
+        { bg: 'linear-gradient(to bottom, #e0f2ff 0%, #cce7ff 100%)', border: '#b8d8f0', tape: 'linear-gradient(to bottom, #a8d0f0 0%, #94c4e8 100%)' }, // Blue
+        { bg: 'linear-gradient(to bottom, #e8f5e9 0%, #d4ead5 100%)', border: '#b8d8b8', tape: 'linear-gradient(to bottom, #a8d0a8 0%, #94c494 100%)' }, // Green
+        { bg: 'linear-gradient(to bottom, #f3e5f5 0%, #e8d5ea 100%)', border: '#d5b8d8', tape: 'linear-gradient(to bottom, #d0a8d0 0%, #c494c4 100%)' }, // Lavender
+        { bg: 'linear-gradient(to bottom, #fff9e6 0%, #ffeecc 100%)', border: '#e8d8b7', tape: 'linear-gradient(to bottom, #f4e4a0 0%, #e8d88c 100%)' }, // Light Yellow
+        { bg: 'linear-gradient(to bottom, #e1f5fe 0%, #d0ebf7 100%)', border: '#b8d8e8', tape: 'linear-gradient(to bottom, #a8d0e0 0%, #94c4d4 100%)' }, // Light Cyan
+        { bg: 'linear-gradient(to bottom, #fce4ec 0%, #f8d4e0 100%)', border: '#e8b8c8', tape: 'linear-gradient(to bottom, #f0a8bc 0%, #e894ac 100%)' }  // Rose
+      ]
+      
+      // Use post ID to consistently assign the same color to the same post
+      const hash = this.post._id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
+      return colors[hash % colors.length]
     }
   },
   async mounted() {
@@ -192,20 +213,44 @@ export default {
 }
 </script>
 
+
 <style scoped>
 .post-card {
-  background: white;
-  border-radius: 15px;
-  padding: 1.5rem;
+  position: relative;
+  /* background set by inline style */
+  border-radius: 3px;
+  padding: 2.5rem 1.5rem 1.5rem;
   margin-bottom: 1.5rem;
-  box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-  border: 1px solid #e9ecef;
+  box-shadow: 
+    0 1px 3px rgba(0,0,0,0.12),
+    0 3px 8px rgba(0,0,0,0.08);
+  border: 1px solid;
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
+/* Tape effect at the top */
+.post-card::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 80px;
+  height: 25px;
+  background: var(--tape-color, linear-gradient(to bottom, #f4d4a0 0%, #e8c68c 100%));
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 2px;
+  opacity: 0.9;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+
+
 .post-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 25px rgba(0,0,0,0.15);
+  transform: translateY(-4px) rotate(0.5deg);
+  box-shadow: 
+    0 4px 8px rgba(0,0,0,0.15),
+    0 8px 16px rgba(0,0,0,0.1);
 }
 
 .post-header {
@@ -214,24 +259,29 @@ export default {
   align-items: center;
   margin-bottom: 1rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #e9ecef;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  position: relative;
+  z-index: 1;
 }
 
 .anonymous-info {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #6c757d;
-  font-weight: 500;
+  color: #495057;
+  font-weight: 600;
 }
 
 .post-date {
-  color: #adb5bd;
+  color: #6c757d;
   font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .post-content {
   margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
 }
 
 .post-message {
@@ -239,6 +289,8 @@ export default {
   color: #2c3e50;
   margin-bottom: 1rem;
   white-space: pre-wrap;
+  font-weight: 500;
+  text-shadow: 0 1px 1px rgba(255,255,255,0.8);
 }
 
 .post-image {
@@ -267,17 +319,20 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding-top: 1rem;
-  border-top: 1px solid #e9ecef;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  position: relative;
+  z-index: 1;
 }
 
 .reactions {
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .reaction-btn {
-  background: transparent;
-  border: 2px solid #e9ecef;
+  background: rgba(255,255,255,0.7);
+  border: 2px solid rgba(0,0,0,0.15);
   border-radius: 20px;
   padding: 0.4rem 0.8rem;
   cursor: pointer;
@@ -286,10 +341,13 @@ export default {
   align-items: center;
   gap: 0.3rem;
   font-size: 0.9rem;
+  color: #495057;
+  font-weight: 500;
 }
 
 .reaction-btn:hover {
-  background: #f8f9fa;
+  background: rgba(255,255,255,0.9);
+  transform: translateY(-2px);
 }
 
 .reaction-btn.active {
@@ -305,8 +363,8 @@ export default {
 }
 
 .total-reactions {
-  color: #6c757d;
-  font-weight: 500;
+  color: #495057;
+  font-weight: 600;
   display: flex;
   align-items: center;
   gap: 0.3rem;
@@ -320,6 +378,7 @@ export default {
   padding: 0.5rem;
   border-radius: 5px;
   transition: color 0.3s;
+  font-weight: 600;
 }
 
 .report-btn:hover {
