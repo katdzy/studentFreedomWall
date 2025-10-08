@@ -38,7 +38,7 @@
           @click="toggleReaction(reaction.type)"
           :title="reaction.label"
         >
-          <i :class="reaction.icon"></i>
+          <img :src="reaction.image" :alt="reaction.label" class="reaction-icon" />
           <span v-if="reactionCounts[reaction.type]">
             {{ reactionCounts[reaction.type] }}
           </span>
@@ -47,11 +47,11 @@
 
       <div class="post-meta">
         <span class="total-reactions">
-          <i class="fas fa-heart"></i>
+          <img src="emojis/reactions.png" alt="Reactions" class="meta-icon" style="width:30px; height:30px"/>
           {{ totalReactions }}
         </span>
         <button class="report-btn" @click="showReportModal = true" title="Report this post">
-          <i class="fas fa-flag"></i>
+          <img src="emojis/report.png" alt="Report" class="meta-icon" />
         </button>
       </div>
     </div>
@@ -111,11 +111,11 @@ export default {
       selectedReportReason: null,
       reporting: false,
       reactionTypes: [
-        { type: 'like', icon: 'fas fa-thumbs-up', label: 'Like' },
-        { type: 'heart', icon: 'fas fa-heart', label: 'Love' },
-        { type: 'laugh', icon: 'fas fa-laugh', label: 'Funny' },
-        { type: 'wow', icon: 'fas fa-surprise', label: 'Wow' },
-        { type: 'sad', icon: 'fas fa-sad-tear', label: 'Sad' }
+        { type: 'like', image: 'emojis/like.png', label: 'Like' },
+        { type: 'heart', image: 'emojis/love.png', label: 'Love' },
+        { type: 'laugh', image: 'emojis/haha.png', label: 'Funny' },
+        { type: 'wow', image: 'emojis/wow.png', label: 'Wow' },
+        { type: 'sad', image: 'emojis/sad.png', label: 'Sad' }
       ],
       reportReasons: [
         { value: 'inappropriate', label: 'Inappropriate content' },
@@ -331,8 +331,7 @@ export default {
 }
 
 .reaction-btn {
-  background: rgba(255,255,255,0.7);
-  border: 2px solid rgba(0,0,0,0.15);
+  background: transparent;
   border-radius: 20px;
   padding: 0.4rem 0.8rem;
   cursor: pointer;
@@ -356,6 +355,12 @@ export default {
   color: white;
 }
 
+.reaction-icon {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
 .post-meta {
   display: flex;
   align-items: center;
@@ -370,6 +375,12 @@ export default {
   gap: 0.3rem;
 }
 
+.meta-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
 .report-btn {
   background: transparent;
   border: none;
@@ -377,12 +388,24 @@ export default {
   cursor: pointer;
   padding: 0.5rem;
   border-radius: 5px;
-  transition: color 0.3s;
+  transition: all 0.3s;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .report-btn:hover {
-  color: #dc3545;
+  opacity: 0.7;
+}
+
+.report-btn .meta-icon {
+  filter: grayscale(20%);
+  transition: filter 0.3s;
+}
+
+.report-btn:hover .meta-icon {
+  filter: grayscale(0%);
 }
 
 .image-modal {
