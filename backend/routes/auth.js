@@ -37,7 +37,45 @@ router.post('/admin/login', async (req, res) => {
   }
 });
 
-// Create default admin (run once)
+// Admin signup with secret authorization word
+router.post('/admin/signup', async (req, res) => {
+  try {
+    const { username, password, email, secretWord } = req.body;
+    
+    // Validate required fields
+    if (!username || !password || !email || !secretWord) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+    
+    // Check secret authorization word
+    if (secretWord !== 'mevn rocks') {
+      return res.status(401).json({ message: 'Invalid authorization word' });
+    }
+    
+    // Check if admin already exists
+    const existingAdmin = await Admin.findOne({ 
+      $or: [{ username }, { email }] 
+    });
+    if (existingAdmin) {
+      return res.status(400).json({ message: 'Admin with this username or email already exists' });
+    }
+    
+    // Create new admin
+    const admin = new Admin({
+      username,
+      email,
+      password
+    });
+    
+    await admin.save();
+    res.json({ message: 'Admin account created successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Create default admin (run once) - keeping for backward compatibility
 router.post('/admin/setup', async (req, res) => {
   try {
     // Check if admin already exists

@@ -131,4 +131,87 @@ export default {
 .nav-link:hover {
   transform: translateY(-2px);
 }
+
+/* Responsive navbar styles */
+@media (max-width: 750px) {
+  .navbar-brand {
+    font-size: 1.1rem;
+  }
+  
+  .navbar-brand i {
+    font-size: 1rem;
+  }
+  
+  .nav-link {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .nav-link i {
+    font-size: 0.85rem;
+  }
+  
+  .navbar-toggler {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 470px) {
+  .navbar-brand {
+    font-size: 1rem;
+  }
+  
+  .navbar-brand i {
+    font-size: 0.9rem;
+  }
+  
+  .nav-link {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.6rem;
+  }
+  
+  .nav-link i {
+    font-size: 0.8rem;
+  }
+  
+  .navbar-toggler {
+    padding: 0.2rem 0.4rem;
+    font-size: 0.8rem;
+  }
+  
+  .container-fluid {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .navbar-brand {
+    font-size: 0.9rem;
+  }
+  
+  .navbar-brand i {
+    font-size: 0.8rem;
+  }
+  
+  .nav-link {
+    font-size: 0.8rem;
+    padding: 0.35rem 0.5rem;
+  }
+  
+  .nav-link i {
+    font-size: 0.75rem;
+  }
+  
+  .navbar-toggler {
+    padding: 0.15rem 0.3rem;
+    font-size: 0.75rem;
+  }
+  
+  .container-fluid {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
 </style>

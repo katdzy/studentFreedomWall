@@ -36,15 +36,19 @@
             class="btn btn-outline-dark"
             :class="{ active: sortBy === 'recent' }"
             @click="setSortBy('recent')"
+            title="Most Recent"
           >
-            <i class="bi bi-clock-fill me-2"></i> Most Recent
+            <i class="bi bi-clock-fill me-2"></i> 
+            <span>Most Recent</span>
           </button>
           <button 
             class="btn btn-outline-dark"
             :class="{ active: sortBy === 'liked' }"
             @click="setSortBy('liked')"
+            title="Most Liked"
           >
-            <i class="bi bi-heart-fill me-2"></i> Most Liked
+            <i class="bi bi-heart-fill me-2"></i> 
+            <span>Most Liked</span>
           </button>
         </div>
         <span class="badge bg-primary text-lg px-3 py-2">
@@ -85,7 +89,7 @@
           :key="post._id"
           :post="{
             ...post,
-            photoUrl: post.photoUrl ? `http://localhost:3000${post.photoUrl}` : null
+            photoUrl: post.photoUrl
           }"
           @reaction-changed="handleReactionChanged"
         />
@@ -354,6 +358,58 @@ export default {
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
   overflow: hidden;
+}
+
+/* Responsive sorting buttons */
+@media (max-width: 750px) {
+  .btn-group .btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+  }
+  
+  .btn-group .btn i {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 470px) {
+  .btn-group .btn {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+  }
+  
+  .btn-group .btn i {
+    font-size: 0.8rem;
+  }
+  
+  /* Hide text on very small screens, show only icons */
+  .btn-group .btn span {
+    display: none;
+  }
+  
+  .btn-group .btn {
+    padding: 0.5rem;
+    min-width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .btn-group .btn i {
+    margin: 0 !important;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .btn-group .btn {
+    padding: 0.4rem;
+    min-width: 36px;
+  }
+  
+  .btn-group .btn i {
+    font-size: 0.9rem;
+  }
 }
 
 .btn-lg:hover {

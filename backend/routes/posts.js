@@ -1,41 +1,10 @@
 const express = require('express');
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
 const Post = require('../models/Post');
-const Reaction = require('../models/Reaction'); // Add this
+const Reaction = require('../models/Reaction');
 const contentFilter = require('../middleware/contentFilter');
+const { upload, uploadToCloudinary } = require('../utils/cloudinaryUpload');
+const { deleteImage } = require('../config/cloudinary');
 const router = express.Router();
-
-// Configure multer for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadDir = 'uploads/';
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'post-' + uniqueSuffix + path.extname(file.originalname));
-  }
-});
-
-const fileFilter = (req, file, cb) => {
-  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
-  if (allowedTypes.includes(file.mimetype)) {
-    cb(null, true);
-  } else {
-    cb(new Error('Only image files are allowed'), false);
-  }
-};
-
-const upload = multer({ 
-  storage: storage,
-  fileFilter: fileFilter,
-  limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
-});
 
 // Get all approved posts WITH reactions
 router.get('/', async (req, res) => {
@@ -104,7 +73,7 @@ router.get('/', async (req, res) => {
 });
 
 // Create new post
-router.post('/', upload.single('photo'), contentFilter, async (req, res) => {
+router.post('/', upload.single('photo'), uploadToCloudinary, contentFilter, async (req, res) => {
   try {
     const { messageContent } = req.body;
 
@@ -118,7 +87,8 @@ router.post('/', upload.single('photo'), contentFilter, async (req, res) => {
 
     const postData = {
       messageContent: messageContent.trim(),
-      photoUrl: req.file ? `/uploads/${req.file.filename}` : null,
+      photoUrl: req.cloudinaryData ? req.cloudinaryData.url : null,
+      photoPublicId: req.cloudinaryData ? req.cloudinaryData.public_id : null,
       status: status,
       dateCreated: new Date()
     };
@@ -187,6 +157,33 @@ router.get('/:id', async (req, res) => {
     });
   } catch (error) {
     console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Delete post (admin only - will be protected by admin middleware)
+router.delete('/:id', async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    // Delete image from Cloudinary if it exists
+    if (post.photoPublicId) {
+      const deleteResult = await deleteImage(post.photoPublicId);
+      if (!deleteResult.success) {
+        console.warn('Failed to delete image from Cloudinary:', deleteResult.error);
+      }
+    }
+
+    // Delete post from database
+    await Post.findByIdAndDelete(req.params.id);
+
+    res.json({ message: 'Post deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting post:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });

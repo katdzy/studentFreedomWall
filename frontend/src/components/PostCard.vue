@@ -52,12 +52,12 @@
           </button>
         </div>
 
-        <div class="d-flex gap-2 align-items-center">
-          <span class="badge bg-primary">
+        <div class="d-flex gap-2 align-items-stretch">
+          <button type="button" class="btn btn-sm d-flex align-items-center justify-content-center total-reactions-btn" disabled>
             <i class="bi bi-heart-fill me-1"></i>
             {{ totalReactions }}
-          </span>
-          <button type="button" class="btn btn-sm btn-outline-danger" @click.prevent="showReportModal = true" title="Report this post">
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-danger d-flex align-items-center justify-content-center report-btn" @click.prevent="showReportModal = true" title="Report this post">
             <i class="bi bi-flag-fill"></i>
           </button>
         </div>
@@ -442,9 +442,47 @@ export default {
 
 /* Active reaction button styling */
 .reaction-button.active {
-  background-color: #a2e436 !important;
+  background-color: #000 !important;
+  color: #fff !important;
   border-color: #000 !important;
   transform: scale(1.05);
+}
+
+/* Total reactions button styling */
+.total-reactions-btn {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 50%, #ffa8a8 100%) !important;
+  border: 2px solid #000 !important;
+  color: #000 !important;
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  min-height: 31px;
+  height: 31px;
+}
+
+.total-reactions-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.report-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.total-reactions-btn:disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+/* Report button styling to match total reactions */
+.report-btn {
+  min-height: 31px;
+  height: 31px;
+  border: 2px solid #000 !important;
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 .reaction-button.active .reaction-emoji {
@@ -470,6 +508,126 @@ export default {
   }
   to {
     opacity: 1;
+  }
+}
+
+/* Tablet and mobile styles for 750px and below */
+@media (max-width: 750px) {
+  /* Scale down reaction emojis for tablet/mobile */
+  .reaction-emoji {
+    width: 22px !important;
+    height: 22px !important;
+  }
+  
+  /* Adjust reaction button padding for tablet/mobile */
+  .reaction-button {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.8rem;
+  }
+  
+  /* Scale down total reactions and report buttons */
+  .total-reactions-btn,
+  .report-btn {
+    min-height: 30px;
+    height: 30px;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+  }
+  
+  /* Adjust button icons for tablet/mobile */
+  .total-reactions-btn i,
+  .report-btn i {
+    font-size: 0.9rem;
+  }
+  
+  /* Reduce gap between buttons on tablet/mobile */
+  .d-flex.gap-2 {
+    gap: 0.75rem !important;
+  }
+  
+  /* Scale down reaction count text */
+  .reaction-button span {
+    font-size: 0.75rem;
+  }
+}
+
+/* Small mobile styles for 470px and below */
+@media (max-width: 470px) {
+  /* Scale down reaction emojis for small mobile */
+  .reaction-emoji {
+    width: 21px !important;
+    height: 21px !important;
+  }
+  
+  /* Adjust reaction button padding for small mobile */
+  .reaction-button {
+    padding: 0.25rem 0.4rem;
+    font-size: 0.75rem;
+  }
+  
+  /* Scale down total reactions and report buttons */
+  .total-reactions-btn,
+  .report-btn {
+    min-height: 29px;
+    height: 29px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  /* Adjust button icons for small mobile */
+  .total-reactions-btn i,
+  .report-btn i {
+    font-size: 0.85rem;
+  }
+  
+  /* Reduce gap between buttons on small mobile */
+  .d-flex.gap-2 {
+    gap: 0.5rem !important;
+  }
+  
+  /* Scale down reaction count text */
+  .reaction-button span {
+    font-size: 0.7rem;
+  }
+}
+
+/* Mobile-specific styles for 375px and below */
+@media (max-width: 375px) {
+  /* Scale down reaction emojis for mobile */
+  .reaction-emoji {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  
+  /* Adjust reaction button padding for mobile */
+  .reaction-button {
+    padding: 0.25rem 0.4rem;
+    font-size: 0.75rem;
+  }
+  
+  /* Scale down total reactions and report buttons */
+  .total-reactions-btn,
+  .report-btn {
+    min-height: 28px;
+    height: 28px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  /* Adjust button icons for mobile */
+  .total-reactions-btn i,
+  .report-btn i {
+    font-size: 0.8rem;
+  }
+  
+  /* Reduce gap between buttons on mobile */
+  .d-flex.gap-2 {
+    gap: 0.5rem !important;
+  }
+  
+  /* Scale down reaction count text */
+  .reaction-button span {
+    font-size: 0.7rem;
   }
 }
 </style>

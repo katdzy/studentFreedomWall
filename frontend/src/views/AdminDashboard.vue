@@ -99,12 +99,12 @@
           <div class="card border border-dark border-2 shadow h-100">
             <div class="card-body d-flex align-items-center">
               <div class="me-3">
-                <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                <div class="bg-danger text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
                   <i class="bi bi-flag text-2xl"></i>
                 </div>
               </div>
               <div>
-                <h3 class="mb-0 fw-bold text-secondary">{{ stats.totalReports || 0 }}</h3>
+                <h3 class="mb-0 fw-bold text-danger">{{ stats.totalReports || 0 }}</h3>
                 <p class="text-muted mb-0 fw-bold">Reports</p>
               </div>
             </div>
@@ -126,7 +126,7 @@
                 :aria-selected="activeTab === tab.key"
               >
                 <i :class="tab.iconClass" class="me-2"></i>
-                {{ tab.label }}
+                <span>{{ tab.label }}</span>
                 <span v-if="tab.badge" class="badge bg-danger ms-2">{{ tab.badge }}</span>
                 
                 <!-- Tab notification -->
@@ -258,7 +258,7 @@
               <h2 class="mb-0 fw-bold text-danger">
                 <i class="bi bi-flag-fill me-2"></i>
                 Reported Posts
-                <span class="badge bg-danger text-white ms-2">{{ reports.length }}</span>
+                <span class="badge bg-danger text-white ms-2">{{ stats.totalReports || 0 }}</span>
               </h2>
               <div class="text-muted">
                 <i class="bi bi-exclamation-triangle me-1"></i>
@@ -778,14 +778,26 @@ export default {
   padding: 1rem 1.5rem;
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
-  color: #6c757d;
+  color: #2c3e50 !important;
   background: transparent;
   border-bottom: 3px solid transparent;
 }
 
+/* First tab - left rounded corners */
+.nav-tabs .nav-item:first-child .nav-link {
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+
+/* Last tab - right rounded corners */
+.nav-tabs .nav-item:last-child .nav-link {
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
 .nav-tabs .nav-link:hover {
   background: #f8f9fa;
-  color: #000;
+  color: #000 !important;
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   border-bottom-color: #dee2e6;
@@ -793,8 +805,8 @@ export default {
 }
 
 .nav-tabs .nav-link.active {
-  background: #000;
-  color: white;
+  background: #000 !important;
+  color: white !important;
   border-bottom: 3px solid #000;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
@@ -823,11 +835,16 @@ export default {
 /* Badge styling in tabs */
 .nav-tabs .nav-link .badge {
   font-size: var(--font-size-xs);
-  padding: 0.25rem 0.5rem;
+  padding: 0.2rem 0.4rem;
   border-radius: 8px;
   font-weight: 600;
   background: #dc3545 !important;
   border: 1px solid #000;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.2rem;
 }
 
 .nav-tabs .nav-link.active .badge {
@@ -899,70 +916,8 @@ export default {
   100% { transform: rotate(360deg); }
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .admin-dashboard {
-    padding: 1rem 0;
-  }
-  
-  .d-flex.justify-content-between {
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
-  }
-  
-  .col-md-3 {
-    width: 100%;
-  }
-  
-  /* Mobile tab adjustments */
-  .nav-tabs .nav-link {
-    padding: 0.75rem 1rem;
-    font-size: var(--font-size-base);
-  }
-  
-  .nav-tabs .nav-link i {
-    font-size: var(--font-size-base);
-  }
-  
-  .nav-tabs .nav-link .badge {
-    font-size: var(--font-size-xs);
-    padding: 0.2rem 0.4rem;
-  }
-}
 
-@media (max-width: 576px) {
-  .nav-tabs .nav-link {
-    padding: 0.5rem 0.75rem;
-    font-size: var(--font-size-sm);
-  }
-  
-  .nav-tabs .nav-link i {
-    font-size: var(--font-size-sm);
-  }
-  
-  /* Mobile post grid adjustments */
-  .posts-grid {
-    gap: 1rem;
-  }
-  
-  .section-header {
-    padding: 1rem !important;
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
-  }
-  
-  .section-header .col-md-3 {
-    width: 100%;
-  }
-  
-  .report-card {
-    margin-bottom: 1rem;
-  }
-}
-
-/* Posts Grid Layout - Single Column */
+/* Base Layout Styles */
 .posts-grid {
   display: flex;
   flex-direction: column;
@@ -991,22 +946,7 @@ export default {
   box-shadow: 0 8px 25px rgba(220, 53, 69, 0.2) !important;
 }
 
-/* Section Headers */
-.section-header {
-  border-radius: 12px;
-  transition: all 0.3s ease;
-}
-
-.section-header:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-/* Animation for card entry */
-.card {
-  animation: fadeInUp 0.5s ease-out;
-}
-
+/* Animations */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -1029,12 +969,10 @@ export default {
   }
 }
 
-/* Staggered animations for post cards */
 .posts-grid > * {
   animation: slideInUp 0.6s ease-out both;
 }
 
-/* Enhanced empty state styling */
 .alert {
   border-radius: 15px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -1047,23 +985,186 @@ export default {
   opacity: 0.8;
 }
 
-/* Badge enhancements */
-.badge {
-  font-weight: 700;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* Mobile responsive styles */
+@media (max-width: 576px) {
+  .nav-tabs .nav-link {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+  }
+  
+  .nav-tabs .nav-link i {
+    font-size: 1.2rem;
+    margin: 0 !important;
+    font-weight: 700;
+  }
+  
+  .nav-tabs .nav-link .badge {
+    font-size: 0.6rem;
+    padding: 0.15rem 0.35rem;
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 1rem;
+  }
+  
+  /* Hide text labels on mobile, show only icons */
+  .nav-tabs .nav-link span:not(.badge) {
+    display: none;
+  }
+  
+  /* Mobile section headers */
+  .d-flex.justify-content-between.align-items-center.mb-4.p-3 {
+    flex-direction: column !important;
+    gap: 1rem;
+    text-align: center;
+    padding: 1rem !important;
+  }
+  
+  .d-flex.justify-content-between.align-items-center.mb-4.p-3 h2 {
+    font-size: 1.2rem;
+    margin-bottom: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .d-flex.justify-content-between.align-items-center.mb-4.p-3 h2 i {
+    font-size: 1.1rem;
+    margin-right: 0 !important;
+  }
+  
+  .d-flex.justify-content-between.align-items-center.mb-4.p-3 h2 .badge {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+  }
+  
+  .d-flex.justify-content-between.align-items-center.mb-4.p-3 .text-muted {
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+  }
+  
+  .d-flex.justify-content-between.align-items-center.mb-4.p-3 .col-md-3 {
+    width: 100% !important;
+    max-width: 250px;
+    margin: 0 auto;
+  }
+  
+  .d-flex.justify-content-between.align-items-center.mb-4.p-3 .form-select {
+    font-size: 0.85rem;
+    width: 100%;
+  }
+  
+  /* Mobile report cards */
+  .report-card .card-header {
+    padding: 0.75rem 1rem;
+  }
+  
+  .report-card .card-header .d-flex {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+    align-items: flex-start !important;
+  }
+  
+  .report-card .card-header .d-flex .d-flex {
+    flex-direction: row !important;
+    align-items: center !important;
+    width: 100%;
+  }
+  
+  .report-card .card-header .d-flex .d-flex .badge {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .report-card .card-header .d-flex small {
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+  }
+  
+  .report-card .card-body {
+    padding: 0 !important;
+  }
 }
 
-/* Form select styling */
-.form-select {
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.form-select:focus {
-  border-color: #0d6efd;
-  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
-  transform: translateY(-1px);
+@media (max-width: 375px) {
+  .nav-tabs .nav-link {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.75rem;
+    gap: 0.2rem;
+  }
+  
+  .nav-tabs .nav-link i {
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  
+  .nav-tabs .nav-link .badge {
+    font-size: 0.6rem;
+    padding: 0.15rem 0.3rem;
+    top: 0.2rem;
+    right: 0.2rem;
+  }
+  
+  /* Very small mobile section headers */
+  .d-flex.justify-content-between.align-items-center.mb-4.p-3 {
+    padding: 0.75rem !important;
+    gap: 0.75rem;
+  }
+  
+  .d-flex.justify-content-between.align-items-center.mb-4.p-3 h2 {
+    font-size: 1.1rem;
+    gap: 0.4rem;
+  }
+  
+  .d-flex.justify-content-between.align-items-center.mb-4.p-3 h2 i {
+    font-size: 1rem;
+  }
+  
+  .d-flex.justify-content-between.align-items-center.mb-4.p-3 h2 .badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .d-flex.justify-content-between.align-items-center.mb-4.p-3 .text-muted {
+    font-size: 0.8rem;
+  }
+  
+  .d-flex.justify-content-between.align-items-center.mb-4.p-3 .col-md-3 {
+    max-width: 200px;
+  }
+  
+  .d-flex.justify-content-between.align-items-center.mb-4.p-3 .form-select {
+    font-size: 0.8rem;
+  }
+  
+  /* Very small mobile report cards */
+  .report-card .card-header {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .report-card .card-header .d-flex {
+    gap: 0.4rem !important;
+  }
+  
+  .report-card .card-header .d-flex .d-flex .badge {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.4rem;
+  }
+  
+  .report-card .card-header .d-flex small {
+    font-size: 0.7rem;
+  }
 }
 </style>

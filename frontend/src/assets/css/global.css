@@ -1,3 +1,6 @@
+/* Import Lexend font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 /* Global CSS Reset and Base Styles */
 * {
   margin: 0;
@@ -6,7 +9,7 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Lexend', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
   color: #2c3e50;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -39,8 +42,9 @@ body {
   --line-height-relaxed: 1.75;
 }
 
-/* Typography Base */
+/* Typography Base - Apply Lexend to all headings */
 h1, h2, h3, h4, h5, h6 {
+  font-family: 'Lexend', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 600;
   color: #2c3e50;
   line-height: var(--line-height-tight);
@@ -54,6 +58,7 @@ h5 { font-size: var(--font-size-lg); }
 h6 { font-size: var(--font-size-base); }
 
 p {
+  font-family: 'Lexend', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin-bottom: 1rem;
   font-size: var(--font-size-base);
   line-height: var(--line-height-normal);
@@ -78,7 +83,7 @@ p {
 
 /* Buttons */
 button {
-  font-family: inherit;
+  font-family: 'Lexend', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -91,7 +96,7 @@ button:disabled {
 
 /* Form Elements */
 input, textarea, select {
-  font-family: inherit;
+  font-family: 'Lexend', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   border: 2px solid #e9ecef;
   border-radius: 8px;
   padding: 0.8rem;
@@ -189,4 +194,33 @@ input:focus, textarea:focus, select:focus {
     margin: 1rem;
     padding: 1rem;
   }
+}
+
+/* Ensure post content keeps its original font (Comic Sans MS) */
+.sticky-note .card-text,
+.sticky-note .card-body {
+  font-family: 'Comic Sans MS', 'Marker Felt', cursive !important;
+}
+
+/* Apply Lexend to all other text elements */
+.navbar,
+.navbar-brand,
+.nav-link,
+.card-header,
+.card-footer,
+.modal-title,
+.modal-body,
+.alert,
+.badge,
+.btn,
+.form-label,
+.form-control,
+.list-group-item,
+.text-center,
+.text-muted,
+.fw-bold,
+small,
+span:not(.reaction-emoji),
+strong {
+  font-family: 'Lexend', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
 }

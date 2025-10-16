@@ -281,7 +281,8 @@ export default {
       return moment(date).format('MMM DD, YYYY HH:mm')
     },
     getImageUrl(photoUrl) {
-      // Uses your express static route
+      if (!photoUrl) return ''
+      if (photoUrl.startsWith('http')) return photoUrl
       return `http://localhost:3000${photoUrl}`
     },
     
@@ -348,17 +349,14 @@ export default {
 
 /* Status-based styling */
 .status-pending { 
-  border-left: 5px solid #ffc107 !important;
   background: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
 }
 
 .status-approved { 
-  border-left: 5px solid #28a745 !important;
   background: linear-gradient(135deg, #e8f5e8 0%, #ffffff 100%);
 }
 
 .status-rejected { 
-  border-left: 5px solid #dc3545 !important;
   background: linear-gradient(135deg, #ffeaea 0%, #ffffff 100%);
 }
 
@@ -540,6 +538,18 @@ export default {
     padding: 0.75rem 1rem;
   }
   
+  .card-header .d-flex {
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+    align-items: flex-start !important;
+  }
+  
+  .card-header .d-flex .d-flex {
+    flex-direction: row !important;
+    align-items: center !important;
+    width: 100%;
+  }
+  
   .card-body {
     padding: 1rem;
   }
@@ -548,13 +558,28 @@ export default {
     padding: 0.75rem 1rem;
   }
   
+  .card-footer .d-flex {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+    align-items: flex-start !important;
+  }
+  
+  .card-footer .d-flex .d-flex {
+    flex-direction: row !important;
+    align-items: center !important;
+  }
+  
   .post-actions {
-    flex-direction: column;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap;
     gap: 0.5rem;
+    width: 100%;
   }
   
   .post-actions .btn {
-    width: 100%;
+    flex: 1 1 auto;
+    min-width: 100px;
   }
   
   .status-badge {

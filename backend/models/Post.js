@@ -10,6 +10,10 @@ const postSchema = new mongoose.Schema({
     type: String,
     default: null
   },
+  photoPublicId: {
+    type: String,
+    default: null
+  },
   dateCreated: {
     type: Date,
     default: Date.now,

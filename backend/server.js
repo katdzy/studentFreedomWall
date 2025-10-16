@@ -44,12 +44,8 @@ app.use(compression({
   threshold: 1024 // Only compress if response is larger than 1KB
 }));
 
-// Static files with caching
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
-  maxAge: isDevelopment ? 0 : '1d', // Cache for 1 day in production
-  etag: true,
-  immutable: !isDevelopment
-}));
+// Static files with caching (for any remaining local assets)
+// Note: File uploads now use Cloudinary, so this is only for other static assets
 
 // Security middleware
 app.use(helmet({

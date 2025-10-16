@@ -3,7 +3,7 @@
     <!-- Hero Section -->
     <div class="text-center mb-5">
       <h1 class="display-3 fw-bold">
-        <i class="bi bi-info-circle-fill text-primary me-3"></i>
+        <i class="bi text-primary me-3"></i>
         About Us
       </h1>
     </div>
@@ -22,10 +22,6 @@
 
     <!-- Features Section -->
     <div class="my-5">
-      <h2 class="fw-bold mb-4">
-        <i class="bi bi-star-fill text-warning me-2"></i>
-        Key Features
-      </h2>
       <div class="row g-4">
         <div class="col-md-6">
           <div class="card border border-dark border-2 shadow h-100">
@@ -104,7 +100,7 @@
     <!-- Team Section -->
     <div class="card border border-dark border-2 shadow-lg my-5">
       <div class="card-header bg-dark text-white border-bottom border-dark border-2">
-        <h2 class="fw-bold mb-0">
+        <h2 class="fw-bold mb-0 text-white">
           <i class="bi bi-people-fill me-2"></i>
           Project Team
         </h2>

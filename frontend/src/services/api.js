@@ -138,7 +138,7 @@ const _adminAPI = {
 // Exported APIs (with throttling for GET requests)
 export const authAPI = {
   adminLogin: (credentials) => api.post('/auth/admin/login', credentials),
-  setupAdmin: () => api.post('/auth/admin/setup')
+  adminSignup: (signupData) => api.post('/auth/admin/signup', signupData)
 }
 
 export const postsAPI = {
