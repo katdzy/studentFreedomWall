@@ -61,7 +61,7 @@ class SocketService {
         this.socket = null
       }
 
-      this.socket = io('http://localhost:3000', {
+      this.socket = io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:10000', {
         auth: { token: authToken },
         reconnection: true,
         reconnectionDelay: 2000,
@@ -182,7 +182,7 @@ class SocketService {
 
   async handleTokenExpired() {
     try {
-      const response = await fetch('http://localhost:3000/api/auth/refresh', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:10000'}/api/auth/refresh`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' }
