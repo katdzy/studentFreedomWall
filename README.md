@@ -31,7 +31,7 @@ Traditional physical freedom walls have long been a feature of college life, pro
 - **Accessibility**: Built with accessibility best practices
 - **Performance Optimized**: Fast loading and smooth interactions
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 - **Vue.js 3** - Progressive JavaScript framework
