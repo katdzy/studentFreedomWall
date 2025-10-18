@@ -225,7 +225,6 @@ The application is fully responsive and optimized for:
 If you have any questions or need help, please:
 - Open an issue on GitHub
 - Contact us at [andreidungca6@gmail.com](mailto:andreidungca6@gmail.com)
-- Check the documentation in the `/docs` folder
 
 ---
 
